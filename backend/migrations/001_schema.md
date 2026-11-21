@@ -8,3 +8,12 @@
 - `schedules` 保存定时计划和下一到期时间。
 - `deliveries` 保存站内分发回执，每次运行最多一个回执。
 - `audit_events` 记录登录、数据入库、运行、复核和报表分发动作。
+
+## 字段扩展（兼容旧台账）
+
+- `datasets.rows` 的 JSON 行新增四个可空字段，旧批次行里缺这些键时按 `null` 处理，无需数据迁移：
+  - `exposure_min` / `exposure_max`：漏记窗口的车次上下限，此时 `exposure` 与 `count` 为空。
+  - `signal_total`：信号台「日期 × 路段」总车次，同日同路段各行一致。
+  - `duty_total`：值班台「日期 × 时段」全线分时总车次，同日同时段各行一致。
+- 表结构未变，只在 `runs.result` 的 JSON 内增加 `mode=reconciliation` 的对账结果（每日对账、可行范围、稳健领先与证人分配）。
+- 只有原始七个字段的旧台账自动走 `mode=legacy`，输出结构与原报表保持一致。

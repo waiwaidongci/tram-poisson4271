@@ -10,7 +10,7 @@ from src.models.identity import User
 from src.models.source import Dataset
 from src.schemas.requests import Upload
 from src.services.audit import record
-from src.services.datasets import save, template
+from src.services.datasets import reconcile_template, save, template
 from src.services.validation import parse_rows
 from src.utils import views
 
@@ -26,6 +26,13 @@ def spec():
 def sample(actor: User = Depends(current)):
     filename = quote(SPEC['sample_name'])
     return Response(template(), media_type='text/csv; charset=utf-8',
+                    headers={'Content-Disposition': f"attachment; filename*=UTF-8''{filename}"})
+
+
+@router.get('/reconcile-template')
+def reconcile_sample(actor: User = Depends(current)):
+    filename = quote(SPEC['reconcile_sample_name'])
+    return Response(reconcile_template(), media_type='text/csv; charset=utf-8',
                     headers={'Content-Disposition': f"attachment; filename*=UTF-8''{filename}"})
 
 

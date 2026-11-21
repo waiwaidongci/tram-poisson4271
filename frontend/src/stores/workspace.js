@@ -19,4 +19,5 @@ export const workspace = {
   schedule: data => call('/schedules', data),
   disable: id => call(`/schedules/${id}/disable`, {}),
   download: (path, filename) => saveFile(path, session.token, filename),
+  downloadReconcileTemplate: filename => saveFile('/reconcile-template', session.token, filename),
 };

@@ -4,7 +4,7 @@ import io
 import json
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
-from src.domain.demo import demo_rows
+from src.domain.demo import demo_reconciliation_rows, demo_rows
 from src.domain.spec import SPEC
 from src.models.source import Dataset
 
@@ -41,4 +41,13 @@ def template():
     writer.writeheader()
     # The complete representative dataset also works as a reproducible import fixture.
     writer.writerows(demo_rows())
+    return '\ufeff' + buffer.getvalue()
+
+
+def reconcile_template():
+    fields = [field['key'] for field in SPEC['fields']]
+    buffer = io.StringIO(newline='')
+    writer = csv.DictWriter(buffer, fieldnames=fields, extrasaction='ignore')
+    writer.writeheader()
+    writer.writerows(demo_reconciliation_rows())
     return '\ufeff' + buffer.getvalue()

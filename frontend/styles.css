@@ -120,6 +120,16 @@ body[data-page="results"] .main > div > .panel { margin-top:1rem; }
 .test-roles { border-top:1px solid var(--line); padding-top:.7rem; margin-top:1.35rem; }
 .login-roles { display:flex; flex-wrap:wrap; gap:.45rem; }
 .login-roles button { min-height:2rem; font-size:.85rem; }
+.reconcile-banner { padding:clamp(1rem,2vw,1.6rem); border:1px solid var(--line); border-left-width:5px; margin:1rem 0; }
+.reconcile-banner.is-ok { border-left-color:oklch(58% .14 152); background:color-mix(in oklch,oklch(58% .14 152) 9%,var(--panel)); }
+.reconcile-banner.is-blocked { border-left-color:oklch(58% .16 29); background:color-mix(in oklch,oklch(58% .16 29) 9%,var(--panel)); }
+.reconcile-banner h3 { margin:.2rem 0 .5rem; }
+.reconcile-totals { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr)); gap:1rem; margin:1rem 0; }
+.reconcile-totals .panel { border-top:3px solid var(--accent); }
+.witness { border:1px solid var(--line); padding:.7rem .85rem; margin-top:.6rem; background:var(--panel); }
+.witness summary { font-weight:650; cursor:pointer; }
+.witness .table-wrap { margin-top:.7rem; }
+body[data-page="reconcile"] .main > div > .panel { margin-top:1rem; }
 @media(max-width:1100px) {
   .two-col,.overview { grid-template-columns:minmax(0,1.65fr) minmax(195px,1fr); }
   .header { align-items:flex-start; }

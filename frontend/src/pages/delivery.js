@@ -28,6 +28,6 @@ export async function deliveryPage(route, refresh) {
     {key:'detail',label:'说明'}, {label:'时间',render:row=>date(row.created_at)},
     {label:'查看',render:row=>link(`运行 ${row.run_id}`,`#results/${row.run_id}`)},
   ],await workspace.deliveries(),{caption:'站内收件箱',empty:'计划到时执行，回执将在此更新。'})) : null;
-  return el('div',{}, panel(spec.pages[5], p('按运行批次下载 CSV，复核状态随报告保留。','subtle'), artifacts, message),
+  return el('div',{}, panel(spec.pages[6], p('按运行批次下载 CSV，复核状态随报告保留。','subtle'), artifacts, message),
     delivery, spec.scheduled && await runPage({...route,scheduling:true},refresh));
 }

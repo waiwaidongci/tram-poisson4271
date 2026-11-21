@@ -12,6 +12,8 @@ export async function inputs(route, refresh) {
   const selected = datasets.find(item => item.id === route.id) || datasets[0];
   const error = feedback();
   const sample = button('下载示例 CSV', {class:'quiet',onClick:event=>handler(sample,error,()=>workspace.download('/template',spec.sample_name))(event)});
+  const reconcileSample = spec.reconcile_sample_name && button('下载跨系统对账示例 CSV', {class:'quiet',
+    onClick:event=>handler(reconcileSample,error,()=>workspace.downloadReconcileTemplate(spec.reconcile_sample_name))(event)});
   const detail = selected && await workspace.getDataset(selected.id,route.offset);
   const columns = spec.fields.map(field => ({key:field.key,label:field.label}));
   const preview = detail ? panel('批次明细', el('div',{class:'actions'},
@@ -39,7 +41,7 @@ export async function inputs(route, refresh) {
   })},field({key:'batch_name',label:'批次名称',type:'string',max_length:120}),
     el('label',{class:'field',for:'source'}, el('span',{},'业务 CSV'),el('input',{id:'source',type:'file',name:'source',accept:'.csv,text/csv',required:true})), submit);
   return el('div',{class:'two-col'},el('div',{class:'wide-panel'},preview),el('aside',{class:'sidebar-panel'},
-    panel('数据导入',p('导入后保留原批次和校验指纹，可用同一份数据复跑。','subtle'),sample,upload,error),
+    panel('数据导入',p('导入后保留原批次和校验指纹，可用同一份数据复跑。','subtle'),sample,reconcileSample,upload,error),
     panel('字段说明',el('dl',{class:'dictionary'},spec.fields.map(item=>el('div',{},el('dt',{},item.label),
       el('dd',{},item.key,item.required === false ? ' · 可空' : ' · 必填',item.options ? ` · ${item.options.join(' / ')}` : '')))))));
 }

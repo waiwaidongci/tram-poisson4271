@@ -48,12 +48,16 @@ def parse_rows(text):
     reader = csv.DictReader(io.StringIO(text.removeprefix('\ufeff'), newline=''), strict=True)
     fields = SPEC['fields']
     keys = {field['key'] for field in fields}
-    required = {field['key'] for field in fields if field.get('required', True)}
     rows = []
     try:
         headers = reader.fieldnames or []
-        if not required <= set(headers) or not set(headers) <= keys or len(headers) != len(set(headers)):
-            raise ValueError('CSV 表头与字段说明不符，请下载模板检查列名')
+        header_set = set(headers)
+        missing_columns = [field['label'] for field in fields
+                           if field.get('required', True) and field['key'] not in header_set]
+        if missing_columns:
+            raise ValueError('CSV 缺少必填列：' + '、'.join(missing_columns) + '，请下载模板检查表头')
+        if not set(headers) <= keys or len(headers) != len(set(headers)):
+            raise ValueError('CSV 表头与字段说明不符，请下载模板检查列名（旧台账至少保留全部必填列）')
         for raw in reader:
             if len(rows) >= 5000:
                 raise ValueError('一个数据批次最多导入 5000 行')
